@@ -1,14 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/domain/entities/genre.dart';
-import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
-import 'package:ditonton/common/state_enum.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_detail/movie_detail_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_recommendation/movie_recommendation_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_watchlist/movie_watchlist_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_recommendation/tv_series_recommendation_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_watchlist/tv_series_watchlist_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:provider/provider.dart';
 
-import '../../domain/entities/episode.dart';
-import '../provider/tv_series_detail_notifier.dart';
+import '../bloc/tv/tv_series_detail/tv_series_detail_bloc.dart';
+import '../bloc/tv/tv_series_episode/tv_series_episode_bloc.dart';
 import 'home_movie_page.dart';
 
 class MovieDetailArgs {
@@ -40,13 +43,28 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     super.initState();
     Future.microtask(() {
       if (widget.args.isMovie) {
-        Provider.of<MovieDetailNotifier>(context, listen: false)
-          ..fetchMovieDetail(widget.args.id)
-          ..loadWatchlistStatus(widget.args.id);
+        context
+            .read<MovieDetailBloc>()
+            .add(GetMovieDetailEvent(widget.args.id));
+        context
+            .read<MovieRecommendationBloc>()
+            .add(GetMovieRecommendationEvent(widget.args.id));
+        context
+            .read<MovieWatchlistBloc>()
+            .add(GetStatusMovieEvent(widget.args.id));
       } else {
-        Provider.of<TvSeriesDetailNotifier>(context, listen: false)
-          ..fetchTvSeriesDetail(widget.args.id)
-          ..loadWatchlistStatusTVSeries(widget.args.id);
+        context
+            .read<TvSeriesDetailBloc>()
+            .add(GetTvDetailEvent(widget.args.id));
+        context
+            .read<TvSeriesRecommendationBloc>()
+            .add(GetTvSeriesRecommendationEvent(widget.args.id));
+        context
+            .read<TvSeriesWatchlistBloc>()
+            .add(GetStatusTvSeriesEvent(widget.args.id));
+        context
+            .read<TvSeriesEpisodeBloc>()
+            .add(TvSeriesEpisodeGetEvent(widget.args.id, 1));
       }
     });
   }
@@ -54,20 +72,37 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.args.isMovie ? _movieConsumer() : _tvConsumer(),
+      body: widget.args.isMovie ? _movieBlocBuilder() : _tvConsumer(),
     );
   }
 
-  Widget _movieConsumer() {
-    return Consumer<MovieDetailNotifier>(
-      builder: (context, provider, child) {
-        if (provider.movieState == RequestState.Loading) {
+  Widget _movieBlocBuilder() {
+    return BlocListener<MovieWatchlistBloc, MovieWatchlistState>(
+      listener: (_, state) {
+        if (state is MovieWatchlistSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.message),
+          ));
+
+          context
+              .read<MovieWatchlistBloc>()
+              .add(GetStatusMovieEvent(widget.args.id));
+        }
+      },
+      child: BlocBuilder<MovieDetailBloc, MovieDetailState>(
+          builder: (context, state) {
+        if (state is MovieDetailLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (provider.movieState == RequestState.Loaded) {
-          final movie = provider.movie;
-          final isAddedWatchlist = provider.isAddedToWatchlist;
+        } else if (state is MovieDetailHasData) {
+          final movie = state.movieDetail;
+          bool isAddedWatchlist = (context.watch<MovieWatchlistBloc>().state
+                  is MovieWatchlistStatusHasData)
+              ? (context.read<MovieWatchlistBloc>().state
+                      as MovieWatchlistStatusHasData)
+                  .result
+              : false;
           return SafeArea(
             child: DetailContent(
               isAddedWatchlist: isAddedWatchlist,
@@ -79,30 +114,13 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               genres: movie.genres!,
               onWatchListClick: () async {
                 if (!isAddedWatchlist) {
-                  await Provider.of<MovieDetailNotifier>(context, listen: false)
-                      .addWatchlist(movie);
+                  context
+                      .read<MovieWatchlistBloc>()
+                      .add(AddItemMovieEvent(movie));
                 } else {
-                  await Provider.of<MovieDetailNotifier>(context, listen: false)
-                      .removeFromWatchlist(movie);
-                }
-
-                final message =
-                    Provider.of<MovieDetailNotifier>(context, listen: false)
-                        .watchlistMessage;
-
-                if (message == MovieDetailNotifier.watchlistAddSuccessMessage ||
-                    message ==
-                        MovieDetailNotifier.watchlistRemoveSuccessMessage) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(message)));
-                } else {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Text(message),
-                        );
-                      });
+                  context
+                      .read<MovieWatchlistBloc>()
+                      .add(RemoveItemMovieEvent(movie));
                 }
               },
               lwSeason: [Container()],
@@ -113,17 +131,16 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   'Recommendations',
                   style: kHeading6,
                 ),
-                Builder(builder: (context) {
-                  if (provider.recommendationState == RequestState.Loading) {
+                BlocBuilder<MovieRecommendationBloc, MovieRecommendationState>(
+                    builder: (context, state) {
+                  if (state is MovieRecommendationLoading) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (provider.recommendationState ==
-                      RequestState.Error) {
-                    return Text(provider.message);
-                  } else if (provider.recommendationState ==
-                      RequestState.Loaded) {
-                    final recommendations = provider.movieRecommendations;
+                  } else if (state is MovieRecommendationError) {
+                    return Text(state.message);
+                  } else if (state is MovieRecommendationHasData) {
+                    final recommendations = state.movie;
                     if (recommendations.isEmpty) {
                       return const Text("No recommendations");
                     }
@@ -159,25 +176,44 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               ],
             ),
           );
+        } else if (state is MovieDetailError) {
+          return Text(state.message);
         } else {
-          return Text(provider.message);
+          return const Text("Error");
         }
-      },
+      }),
     );
   }
 
   Widget _tvConsumer() {
-    return Consumer<TvSeriesDetailNotifier>(
-      builder: (context, provider, child) {
-        if (provider.tvSeriesState == RequestState.Loading) {
+    return BlocListener<TvSeriesWatchlistBloc, TvSeriesWatchlistState>(
+      listener: (_, state) {
+        if (state is TvSeriesWatchlistSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.message),
+          ));
+
+          context
+              .read<TvSeriesWatchlistBloc>()
+              .add(GetStatusTvSeriesEvent(widget.args.id));
+        }
+      },
+      child: BlocBuilder<TvSeriesDetailBloc, TvSeriesDetailState>(
+          builder: (context, state) {
+        if (state is TvDetailLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (provider.tvSeriesState == RequestState.Loaded) {
-          final tv = provider.tvSeries;
+        } else if (state is TvDetailHasData) {
+          final tv = state.tvDetail;
           final seasons = tv.seasons;
-          final tvEpisode = provider.tvEpisode;
-          final isAddedWatchlist = provider.isAddedToWatchlistTvSeries;
+          bool isAddedWatchlist = (context.watch<TvSeriesWatchlistBloc>().state
+                  is TvSeriesWatchlistStatusHasData)
+              ? (context.read<TvSeriesWatchlistBloc>().state
+                      as TvSeriesWatchlistStatusHasData)
+                  .result
+              : false;
+
           return SafeArea(
             child: DetailContent(
               isAddedWatchlist: isAddedWatchlist,
@@ -189,42 +225,21 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               genres: tv.genres ?? [],
               onWatchListClick: () async {
                 if (!isAddedWatchlist) {
-                  await Provider.of<TvSeriesDetailNotifier>(context,
-                          listen: false)
-                      .addWatchlistTvSeries(tv);
+                  context
+                      .read<TvSeriesWatchlistBloc>()
+                      .add(AddItemTvSeriesEvent(tv));
                 } else {
-                  await Provider.of<TvSeriesDetailNotifier>(context,
-                          listen: false)
-                      .removeFromWatchlistTvSeries(tv);
-                }
-
-                final message =
-                    Provider.of<TvSeriesDetailNotifier>(context, listen: false)
-                        .watchlistMessage;
-
-                if (message ==
-                        TvSeriesDetailNotifier.watchlistAddSuccessMessage ||
-                    message ==
-                        TvSeriesDetailNotifier.watchlistRemoveSuccessMessage) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(message)));
-                } else {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Text(message),
-                        );
-                      });
+                  context
+                      .read<TvSeriesWatchlistBloc>()
+                      .add(RemoveItemTvSeriesEvent(tv));
                 }
               },
               lwEpisode: [
-                Selector<TvSeriesDetailNotifier, List<Episode>>(
-                  selector: (_, data) => data.tvEpisode,
-                  builder: (_, value, __) {
-                    if (provider.episodeState == RequestState.Loading) {
+                BlocBuilder<TvSeriesEpisodeBloc, TvSeriesEpisodeState>(
+                  builder: (context, state) {
+                    if (state is TvEpisodeLoading) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (provider.episodeState == RequestState.Loaded) {
+                    } else if (state is TvEpisodeHasData) {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -239,9 +254,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                             child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              itemCount: tvEpisode.length,
+                              itemCount: state.result.length,
                               itemBuilder: (context, index) {
-                                final item = tvEpisode[index];
+                                final item = state.result[index];
                                 final episode = item.name;
                                 return Padding(
                                   padding: const EdgeInsets.all(4.0),
@@ -322,10 +337,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                               child: Card(
                                 child: InkWell(
                                   onTap: () async {
-                                    await Provider.of<TvSeriesDetailNotifier>(
-                                            context,
-                                            listen: false)
-                                        .fetchTvEpisode(tv.id!, index);
+                                    context.read<TvSeriesEpisodeBloc>().add(
+                                        TvSeriesEpisodeGetEvent(
+                                            widget.args.id, index));
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -368,17 +382,16 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   'Recommendations',
                   style: kHeading6,
                 ),
-                Builder(builder: (context) {
-                  if (provider.recommendationState == RequestState.Loading) {
+                BlocBuilder<TvSeriesRecommendationBloc,
+                    TvSeriesRecommendationState>(builder: (context, state) {
+                  if (state is TvSeriesRecommendationLoading) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (provider.recommendationState ==
-                      RequestState.Error) {
-                    return Text(provider.message);
-                  } else if (provider.recommendationState ==
-                      RequestState.Loaded) {
-                    final recommendations = provider.tvSeriesRecommendations;
+                  } else if (state is TvSeriesRecommendationError) {
+                    return Text(state.message);
+                  } else if (state is TvSeriesRecommendationHasData) {
+                    final recommendations = state.tvSeries;
                     if (recommendations.isEmpty) {
                       return const Text("No recommendations");
                     }
@@ -415,10 +428,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               ],
             ),
           );
+        } else if (state is TvDetailError) {
+          return Text(state.message);
         } else {
-          return Text(provider.message);
+          return const Text("Error");
         }
-      },
+      }),
     );
   }
 }

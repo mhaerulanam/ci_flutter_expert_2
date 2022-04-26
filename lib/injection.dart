@@ -23,6 +23,21 @@ import 'package:ditonton/domain/usecases/remove_watchlist_tv_series.dart';
 import 'package:ditonton/domain/usecases/save_watchlist.dart';
 import 'package:ditonton/domain/usecases/save_watchlist_tv_series.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_detail/movie_detail_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_now_playing/movie_now_playing_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_popular/movie_popular_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_recommendation/movie_recommendation_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_top_rated/movie_top_rated_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/movie_watchlist/movie_watchlist_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/search/search_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/search/tv_search_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_on_the_air/tv_on_the_air_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_detail/tv_series_detail_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_episode/tv_series_episode_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_popular/tv_series_popular_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_recommendation/tv_series_recommendation_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_top_rated/tv_series_top_rated_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/tv_series_watchlist/tv_series_watchlist_bloc.dart';
 import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
@@ -49,6 +64,63 @@ import 'domain/usecases/search_tv.dart';
 final locator = GetIt.instance;
 
 void init() {
+  //bloc movie
+  locator.registerFactory(() => MovieNowPlayingBloc(
+        locator(),
+      ));
+  locator.registerFactory(() => MoviePopularBloc(
+        locator(),
+      ));
+  locator.registerFactory(() => MovieTopRatedBloc(
+        locator(),
+      ));
+  locator.registerFactory(() => MovieDetailBloc(
+        getMovieDetail: locator(),
+      ));
+  locator.registerFactory(() => MovieRecommendationBloc(
+        getMovieRecommendations: locator(),
+      ));
+  locator.registerFactory(
+    () => SearchBloc(
+      locator(),
+    ),
+  );
+  locator.registerFactory(() => MovieWatchlistBloc(
+      getMovieWatchLists: locator(),
+      getWatchListStatus: locator(),
+      saveWatchlist: locator(),
+      removeWatchlist: locator()));
+
+  //Bloc Tv Series
+  locator.registerFactory(() => TvOnTheAirBloc(
+        locator(),
+      ));
+  locator.registerFactory(() => TvSeriesPopularBloc(
+        locator(),
+      ));
+  locator.registerFactory(() => TvSeriesTopRatedBloc(
+        locator(),
+      ));
+  locator.registerFactory(() => TvSeriesDetailBloc(
+        getTvDetail: locator(),
+      ));
+  locator.registerFactory(() => TvSeriesRecommendationBloc(
+        getTvSeriesRecommendations: locator(),
+      ));
+  locator.registerFactory(
+    () => TvSeriesEpisodeBloc(locator()),
+  );
+  locator.registerFactory(
+    () => TvSearchBloc(
+      searchTvSeries: locator(),
+    ),
+  );
+  locator.registerFactory(() => TvSeriesWatchlistBloc(
+      getWatchListsTvSeries: locator(),
+      getWatchListStatusTvSeries: locator(),
+      saveWatchlistTvSeries: locator(),
+      removeWatchlistTvSeries: locator()));
+
   // provider
   locator.registerFactory(
     () => TvSeriesListNotifier(

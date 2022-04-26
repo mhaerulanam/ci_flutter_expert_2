@@ -13,12 +13,12 @@ import 'tv_series_search_notifier_test.mocks.dart';
 @GenerateMocks([SearchTv])
 void main() {
   late TvSearchNotifier provider;
-  late MockSearchTvSeries mockSearchTvSeries;
+  late MockSearchTv mockSearchTvSeries;
   late int listenerCallCount;
 
   setUp(() {
     listenerCallCount = 0;
-    mockSearchTvSeries = MockSearchTvSeries();
+    mockSearchTvSeries = MockSearchTv();
     provider = TvSearchNotifier(searchTvs: mockSearchTvSeries)
       ..addListener(() {
         listenerCallCount += 1;

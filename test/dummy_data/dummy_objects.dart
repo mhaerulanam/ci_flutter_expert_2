@@ -48,7 +48,7 @@ final testWatchlistMovie = Movie.watchlist(
   posterPath: 'posterPath',
   overview: 'overview',
 );
-
+final testWatchlistMovieList = [testWatchlistMovie];
 final testMovieTable = MovieTable(
   id: 1,
   title: 'title',
@@ -140,6 +140,8 @@ final testWatchlistTvSeries = TvSeries.watchlist(
   posterPath: 'posterPath',
   overview: 'overview',
 );
+
+final testWatchlistTvSeriesList = [testWatchlistTvSeries];
 
 final testTvSeriesTable = TvSeriesTable(
   id: 1,
