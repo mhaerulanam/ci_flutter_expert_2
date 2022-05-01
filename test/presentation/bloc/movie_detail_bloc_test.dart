@@ -2,7 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
-import 'package:ditonton/common/failure.dart';
+import '../../../common/lib/common/failure.dart';
 import 'package:ditonton/domain/usecases/get_movie_detail.dart';
 import 'package:ditonton/presentation/bloc/movie/movie_detail/movie_detail_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';

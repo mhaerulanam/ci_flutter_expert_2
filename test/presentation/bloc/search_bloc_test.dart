@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ditonton/common/failure.dart';
+import '../../../common/lib/common/failure.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
 import 'package:ditonton/presentation/bloc/movie/search/search_bloc.dart';

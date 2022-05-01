@@ -176,6 +176,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  common:
+    dependency: "direct main"
+    description:
+      path: common
+      relative: true
+    source: path
+    version: "0.0.1"
   convert:
     dependency: transitive
     description:
@@ -374,7 +381,7 @@ packages:
       name: google_fonts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   graphs:
     dependency: transitive
     description:
@@ -473,6 +480,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
+  movie:
+    dependency: "direct main"
+    description:
+      path: movie
+      relative: true
+    source: path
+    version: "0.0.1"
   nested:
     dependency: transitive
     description:
@@ -765,6 +779,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  tv_series:
+    dependency: "direct main"
+    description:
+      path: tv_series
+      relative: true
+    source: path
+    version: "0.0.1"
   typed_data:
     dependency: transitive
     description:
@@ -836,5 +857,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.16.0 <3.0.0"
+  dart: ">=2.16.2 <3.0.0"
   flutter: ">=2.10.0-0"

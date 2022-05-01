@@ -1,7 +1,7 @@
 
 import 'package:ditonton/data/datasources/tv_series_remote_data_source.dart';
-import 'package:ditonton/data/models/episode_response.dart';
-import 'package:ditonton/common/exception.dart';
+import '../../../movie/lib/data/models/episode_response.dart';
+import '../../../common/lib/common/exception.dart';
 import 'package:ditonton/data/models/tv_series_detail_model.dart';
 import 'package:ditonton/data/models/tv_series_response.dart';
 import 'package:flutter_test/flutter_test.dart';
