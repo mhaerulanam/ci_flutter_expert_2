@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:ditonton/data/datasources/db/database_helper.dart';
 import 'package:ditonton/data/datasources/db/database_helper_tv_series.dart';
@@ -52,7 +54,9 @@ import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_tv_series_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart';
 
+import 'common/http_ssl_pinning.dart';
 import 'data/datasources/tv_series_local_data_source.dart';
 import 'domain/usecases/get_popular_tv_series.dart';
 import 'domain/usecases/get_tv_episode.dart';
@@ -63,17 +67,9 @@ import 'domain/usecases/search_tv.dart';
 
 final locator = GetIt.instance;
 
-void init() {
+void init() async {
+
   //bloc movie
-  locator.registerFactory(() => MovieNowPlayingBloc(
-        locator(),
-      ));
-  locator.registerFactory(() => MoviePopularBloc(
-        locator(),
-      ));
-  locator.registerFactory(() => MovieTopRatedBloc(
-        locator(),
-      ));
   locator.registerFactory(() => MovieDetailBloc(
         getMovieDetail: locator(),
       ));
@@ -89,7 +85,17 @@ void init() {
       getMovieWatchLists: locator(),
       getWatchListStatus: locator(),
       saveWatchlist: locator(),
-      removeWatchlist: locator()));
+      removeWatchlist: locator())
+  );
+  locator.registerFactory(() => MovieNowPlayingBloc(
+    locator(),
+  ));
+  locator.registerFactory(() => MoviePopularBloc(
+    locator(),
+  ));
+  locator.registerFactory(() => MovieTopRatedBloc(
+    locator(),
+  ));
 
   //Bloc Tv Series
   locator.registerFactory(() => TvOnTheAirBloc(
@@ -252,6 +258,6 @@ void init() {
       () => DatabaseHelperTvSeries());
 
   // external
-  locator.registerLazySingleton(() => http.Client());
+  locator.registerLazySingleton(() => HttpSSLPinning.client);
   locator.registerLazySingleton(() => DataConnectionChecker());
 }

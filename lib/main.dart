@@ -43,7 +43,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ditonton/injection.dart' as di;
 
-void main() {
+import 'common/http_ssl_pinning.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HttpSSLPinning.init();
   di.init();
   runApp(MyApp());
 }
@@ -53,42 +57,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieListNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieDetailNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieSearchNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TopRatedMoviesNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<PopularMoviesNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<WatchlistMovieNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TvSeriesListNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<PopularTvSeriesNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TopRatedTvSeriesNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TvSeriesDetailNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TvSearchNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<WatchlistTvSeriesNotifier>(),
-        ),
         BlocProvider(
           create: (_) => di.locator<SearchBloc>(),
         ),
@@ -134,6 +102,42 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<TvSeriesEpisodeBloc>(),
         ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<MovieListNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<MovieDetailNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<MovieSearchNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<TopRatedMoviesNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<PopularMoviesNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<WatchlistMovieNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<TvSeriesListNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<PopularTvSeriesNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<TopRatedTvSeriesNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<TvSeriesDetailNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<TvSearchNotifier>(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (_) => di.locator<WatchlistTvSeriesNotifier>(),
+        // ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -148,11 +152,20 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case '/home':
-              return MaterialPageRoute(builder: (_) => HomeMoviePage());
+              return MaterialPageRoute(
+                  builder: (_) => HomeMoviePage(),
+                  settings: settings,
+              );
             case PopularMoviesPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => PopularMoviesPage());
+              return CupertinoPageRoute(
+                  builder: (_) => PopularMoviesPage(),
+                  settings: settings,
+              );
             case TopRatedMoviesPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => TopRatedMoviesPage());
+              return CupertinoPageRoute(
+                  builder: (_) => TopRatedMoviesPage(),
+                  settings: settings,
+              );
             case MovieDetailPage.ROUTE_NAME:
               final arg = settings.arguments as MovieDetailArgs;
               return MaterialPageRoute(
@@ -168,13 +181,25 @@ class MyApp extends StatelessWidget {
             case WatchlistMoviesPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
             case AboutPage.ROUTE_NAME:
-              return MaterialPageRoute(builder: (_) => AboutPage());
+              return MaterialPageRoute(
+                  builder: (_) => AboutPage(),
+                  settings: settings,
+              );
             case PopularTvSeriesPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => PopularTvSeriesPage());
+              return CupertinoPageRoute
+                (builder: (_) => PopularTvSeriesPage(),
+                settings: settings,
+              );
             case OnTheAirTvSeriesPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => OnTheAirTvSeriesPage());
+              return CupertinoPageRoute(
+                  builder: (_) => OnTheAirTvSeriesPage(),
+                  settings: settings,
+              );
             case TopRatedTvSeriesPage.ROUTE_NAME:
-              return CupertinoPageRoute(builder: (_) => TopRatedTvSeriesPage());
+              return CupertinoPageRoute(
+                  builder: (_) => TopRatedTvSeriesPage(),
+                  settings: settings,
+              );
             default:
               return MaterialPageRoute(builder: (_) {
                 return Scaffold(
