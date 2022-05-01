@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:tv_series/domain/entities/spoken_language.dart';
 
 class SpokenLanguageModel extends Equatable {
-  SpokenLanguageModel({
+  const SpokenLanguageModel({
     required this.englishName,
     required this.iso6391,
     required this.name,

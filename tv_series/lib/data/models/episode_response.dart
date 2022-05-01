@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import '../../domain/entities/episode.dart';
 
 class EpisodeResponse extends Equatable {
-  EpisodeResponse({
+  const EpisodeResponse({
     this.id,
     this.airDate,
     this.episodes,

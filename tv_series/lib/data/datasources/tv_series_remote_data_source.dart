@@ -17,7 +17,9 @@ abstract class TvSeriesRemoteDataSource {
 }
 
 class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
+  // ignore: constant_identifier_names
   static const API_KEY = 'api_key=3a58e4d37532f1d71684e4c31ffde139';
+  // ignore: constant_identifier_names
   static const BASE_URL = 'https://api.themoviedb.org/3';
 
   final http.Client client;

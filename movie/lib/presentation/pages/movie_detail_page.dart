@@ -3,17 +3,15 @@ import 'package:common/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:home/presentation/pages/home_movie_page.dart';
 import 'package:movie/domain/entities/genre.dart';
 import 'package:movie/presentation/bloc/movie/movie_detail/movie_detail_bloc.dart';
 import 'package:movie/presentation/bloc/movie/movie_recommendation/movie_recommendation_bloc.dart';
-import 'package:movie/presentation/bloc/movie/movie_watchlist/movie_watchlist_bloc.dart';
 import 'package:tv_series/presentation/bloc/tv/tv_series_detail/tv_series_detail_bloc.dart';
 import 'package:tv_series/presentation/bloc/tv/tv_series_episode/tv_series_episode_bloc.dart';
 import 'package:tv_series/presentation/bloc/tv/tv_series_recommendation/tv_series_recommendation_bloc.dart';
 import 'package:tv_series/presentation/bloc/tv/tv_series_watchlist/tv_series_watchlist_bloc.dart';
-
-
-import 'home_movie_page.dart';
+import 'package:watchlist/presentation/movie/movie_watchlist/movie_watchlist_bloc.dart';
 
 class MovieDetailArgs {
   final int id;
@@ -26,13 +24,15 @@ class MovieDetailArgs {
 }
 
 class MovieDetailPage extends StatefulWidget {
+  // ignore: constant_identifier_names
   static const ROUTE_NAME = '/detail';
 
   final MovieDetailArgs args;
 
-  MovieDetailPage({
+  const MovieDetailPage({
+    Key? key,
     required this.args,
-  });
+  }) : super(key: key);
 
   @override
   _MovieDetailPageState createState() => _MovieDetailPageState();

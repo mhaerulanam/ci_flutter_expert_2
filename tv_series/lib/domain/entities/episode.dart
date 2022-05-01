@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Episode extends Equatable {
-  Episode({
+  const Episode({
     this.airDate,
     this.episodeNumber,
     this.id,

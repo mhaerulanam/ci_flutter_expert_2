@@ -4,7 +4,10 @@ import 'package:movie/presentation/bloc/movie/movie_popular/movie_popular_bloc.d
 import 'package:movie/presentation/widgets/movie_card_list.dart';
 
 class PopularMoviesPage extends StatefulWidget {
+  // ignore: constant_identifier_names
   static const ROUTE_NAME = '/popular-movie';
+
+  const PopularMoviesPage({Key? key}) : super(key: key);
 
   @override
   _PopularMoviesPageState createState() => _PopularMoviesPageState();
@@ -23,7 +26,7 @@ class _PopularMoviesPageState extends State<PopularMoviesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Popular Movies'),
+        title: const Text('Popular Movies'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

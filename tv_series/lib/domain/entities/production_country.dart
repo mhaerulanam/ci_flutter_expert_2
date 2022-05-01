@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class ProductionCountry extends Equatable {
-  ProductionCountry({
+  const ProductionCountry({
     required this.iso31661,
     required this.name,
   });

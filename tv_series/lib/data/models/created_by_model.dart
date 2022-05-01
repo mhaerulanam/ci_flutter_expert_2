@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../../domain/entities/create_by.dart';
 
 class CreatedByModel extends Equatable {
-  CreatedByModel({
+  const CreatedByModel({
     required this.id,
     required this.creditId,
     required this.name,
@@ -35,11 +35,11 @@ class CreatedByModel extends Equatable {
 
   CreatedBy toEntity() {
     return CreatedBy(
-        id: this.id,
-        creditId: this.creditId,
-        name: this.name,
-        gender: this.gender,
-        profilePath: this.profilePath);
+        id: id,
+        creditId: creditId,
+        name: name,
+        gender: gender,
+        profilePath: profilePath);
   }
 
   @override

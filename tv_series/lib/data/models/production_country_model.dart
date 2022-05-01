@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:tv_series/domain/entities/production_country.dart';
 
 class ProductionCountryModel extends Equatable {
-  ProductionCountryModel({
+  const ProductionCountryModel({
     required this.iso31661,
     required this.name,
   });
@@ -22,7 +22,7 @@ class ProductionCountryModel extends Equatable {
       };
 
   ProductionCountry toEntity() {
-    return ProductionCountry(iso31661: this.iso31661, name: this.name);
+    return ProductionCountry(iso31661: iso31661, name: name);
   }
 
   @override

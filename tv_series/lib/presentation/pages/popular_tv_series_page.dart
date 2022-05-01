@@ -4,7 +4,10 @@ import 'package:tv_series/presentation/bloc/tv/tv_series_popular/tv_series_popul
 import 'package:tv_series/presentation/widgets/tv_series_card_list.dart';
 
 class PopularTvSeriesPage extends StatefulWidget {
+  // ignore: constant_identifier_names
   static const ROUTE_NAME = '/popular-tv-series';
+
+  const PopularTvSeriesPage({Key? key}) : super(key: key);
 
   @override
   _PopularTvSeriesPageState createState() => _PopularTvSeriesPageState();
@@ -23,7 +26,7 @@ class _PopularTvSeriesPageState extends State<PopularTvSeriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Popular Tv Series'),
+        title: const Text('Popular Tv Series'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

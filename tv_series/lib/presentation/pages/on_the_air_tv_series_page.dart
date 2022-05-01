@@ -4,7 +4,10 @@ import 'package:tv_series/presentation/bloc/tv/tv_on_the_air/tv_on_the_air_bloc.
 import 'package:tv_series/presentation/widgets/tv_series_card_list.dart';
 
 class OnTheAirTvSeriesPage extends StatefulWidget {
+  // ignore: constant_identifier_names
   static const ROUTE_NAME = '/on-the-air-tv-series';
+
+  const OnTheAirTvSeriesPage({Key? key}) : super(key: key);
 
   @override
   _OnTheAirTvSeriesPageState createState() => _OnTheAirTvSeriesPageState();
@@ -23,14 +26,14 @@ class _OnTheAirTvSeriesPageState extends State<OnTheAirTvSeriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tv Series Is Airing'),
+        title: const Text('Tv Series Is Airing'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocBuilder<TvOnTheAirBloc, TvOnTheAirState>(
             builder: (context, state) {
           if (state is TvOnTheAirLoading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is TvOnTheAirHasData) {

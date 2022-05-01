@@ -4,7 +4,10 @@ import 'package:tv_series/presentation/bloc/tv/tv_series_top_rated/tv_series_top
 import 'package:tv_series/presentation/widgets/tv_series_card_list.dart';
 
 class TopRatedTvSeriesPage extends StatefulWidget {
+  // ignore: constant_identifier_names
   static const ROUTE_NAME = '/top-rated-tv-series';
+
+  const TopRatedTvSeriesPage({Key? key}) : super(key: key);
 
   @override
   _TopRatedTvSeriesPageState createState() => _TopRatedTvSeriesPageState();
@@ -23,14 +26,14 @@ class _TopRatedTvSeriesPageState extends State<TopRatedTvSeriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Top Rated Tv Series'),
+        title: const Text('Top Rated Tv Series'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocBuilder<TvSeriesTopRatedBloc, TvSeriesTopRatedState>(
             builder: (context, state) {
           if (state is TvSeriesTopRatedLoading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is TvSeriesTopRatedHasData) {

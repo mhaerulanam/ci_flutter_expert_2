@@ -389,6 +389,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  home:
+    dependency: "direct main"
+    description:
+      path: home
+      relative: true
+    source: path
+    version: "0.0.1"
   http:
     dependency: "direct main"
     description:
@@ -634,6 +641,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.3"
+  search:
+    dependency: "direct main"
+    description:
+      path: search
+      relative: true
+    source: path
+    version: "0.0.1"
   shelf:
     dependency: transitive
     description:
@@ -821,6 +835,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  watchlist:
+    dependency: "direct main"
+    description:
+      path: watchlist
+      relative: true
+    source: path
+    version: "0.0.1"
   web_socket_channel:
     dependency: transitive
     description:

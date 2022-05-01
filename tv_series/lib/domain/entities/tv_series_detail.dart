@@ -5,7 +5,7 @@ import 'package:tv_series/domain/entities/season.dart';
 
 @immutable
 class DetailTvSeries extends Equatable {
-  DetailTvSeries({
+  const DetailTvSeries({
     required this.backdropPath,
     required this.episodeRunTime,
     required this.firstAirDate,

@@ -5,28 +5,25 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home/presentation/pages/home_movie_page.dart';
 import 'package:movie/presentation/bloc/movie/movie_detail/movie_detail_bloc.dart';
 import 'package:movie/presentation/bloc/movie/movie_now_playing/movie_now_playing_bloc.dart';
 import 'package:movie/presentation/bloc/movie/movie_popular/movie_popular_bloc.dart';
 import 'package:movie/presentation/bloc/movie/movie_recommendation/movie_recommendation_bloc.dart';
 import 'package:movie/presentation/bloc/movie/movie_top_rated/movie_top_rated_bloc.dart';
-import 'package:movie/presentation/bloc/movie/movie_watchlist/movie_watchlist_bloc.dart';
-import 'package:movie/presentation/bloc/movie/search/search_bloc.dart';
 import 'package:movie/presentation/pages/about_page.dart';
-import 'package:movie/presentation/pages/home_movie_page.dart';
 import 'package:movie/presentation/pages/movie_detail_page.dart';
 import 'package:movie/presentation/pages/popular_movies_page.dart';
-import 'package:movie/presentation/pages/search_page.dart';
 import 'package:movie/presentation/pages/top_rated_movies_page.dart';
-import 'package:movie/presentation/pages/watchlist_movies_page.dart';
 import 'package:movie/presentation/provider/movie_detail_notifier.dart';
 import 'package:movie/presentation/provider/movie_list_notifier.dart';
-import 'package:movie/presentation/provider/movie_search_notifier.dart';
 import 'package:movie/presentation/provider/popular_movies_notifier.dart';
 import 'package:movie/presentation/provider/top_rated_movies_notifier.dart';
-import 'package:movie/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:ditonton/injection.dart' as di;
+import 'package:search/presentation/bloc/movie/search/search_bloc.dart';
+import 'package:search/presentation/pages/search_page.dart';
+import 'package:search/presentation/provider/movie_search_notifier.dart';
 import 'package:tv_series/presentation/bloc/tv/search/tv_search_bloc.dart';
 import 'package:tv_series/presentation/bloc/tv/tv_on_the_air/tv_on_the_air_bloc.dart';
 import 'package:tv_series/presentation/bloc/tv/tv_series_detail/tv_series_detail_bloc.dart';
@@ -44,7 +41,9 @@ import 'package:tv_series/presentation/provider/tv_series_detail_notifier.dart';
 import 'package:tv_series/presentation/provider/tv_series_list_notifier.dart';
 import 'package:tv_series/presentation/provider/tv_series_search_notifier.dart';
 import 'package:tv_series/presentation/provider/watchlist_tv_series_notifier.dart';
-
+import 'package:watchlist/presentation/movie/movie_watchlist/movie_watchlist_bloc.dart';
+import 'package:watchlist/presentation/pages/watchlist_movies_page.dart';
+import 'package:watchlist/presentation/provider/watchlist_movie_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -155,18 +154,18 @@ class MyApp extends StatelessWidget {
           switch (settings.name) {
             case '/home':
               return MaterialPageRoute(
-                  builder: (_) => HomeMoviePage(),
-                  settings: settings,
+                builder: (_) => HomeMoviePage(),
+                settings: settings,
               );
             case PopularMoviesPage.ROUTE_NAME:
               return CupertinoPageRoute(
-                  builder: (_) => PopularMoviesPage(),
-                  settings: settings,
+                builder: (_) => PopularMoviesPage(),
+                settings: settings,
               );
             case TopRatedMoviesPage.ROUTE_NAME:
               return CupertinoPageRoute(
-                  builder: (_) => TopRatedMoviesPage(),
-                  settings: settings,
+                builder: (_) => TopRatedMoviesPage(),
+                settings: settings,
               );
             case MovieDetailPage.ROUTE_NAME:
               final arg = settings.arguments as MovieDetailArgs;
@@ -184,23 +183,23 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
             case AboutPage.ROUTE_NAME:
               return MaterialPageRoute(
-                  builder: (_) => AboutPage(),
-                  settings: settings,
+                builder: (_) => AboutPage(),
+                settings: settings,
               );
             case PopularTvSeriesPage.ROUTE_NAME:
-              return CupertinoPageRoute
-                (builder: (_) => PopularTvSeriesPage(),
+              return CupertinoPageRoute(
+                builder: (_) => PopularTvSeriesPage(),
                 settings: settings,
               );
             case OnTheAirTvSeriesPage.ROUTE_NAME:
               return CupertinoPageRoute(
-                  builder: (_) => OnTheAirTvSeriesPage(),
-                  settings: settings,
+                builder: (_) => OnTheAirTvSeriesPage(),
+                settings: settings,
               );
             case TopRatedTvSeriesPage.ROUTE_NAME:
               return CupertinoPageRoute(
-                  builder: (_) => TopRatedTvSeriesPage(),
-                  settings: settings,
+                builder: (_) => TopRatedTvSeriesPage(),
+                settings: settings,
               );
             default:
               return MaterialPageRoute(builder: (_) {

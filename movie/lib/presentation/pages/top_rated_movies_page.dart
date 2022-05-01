@@ -4,7 +4,10 @@ import 'package:movie/presentation/bloc/movie/movie_top_rated/movie_top_rated_bl
 import 'package:movie/presentation/widgets/movie_card_list.dart';
 
 class TopRatedMoviesPage extends StatefulWidget {
+  // ignore: constant_identifier_names
   static const ROUTE_NAME = '/top-rated-movie';
+
+  const TopRatedMoviesPage({Key? key}) : super(key: key);
 
   @override
   _TopRatedMoviesPageState createState() => _TopRatedMoviesPageState();
@@ -23,7 +26,7 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Top Rated Movies'),
+        title: const Text('Top Rated Movies'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

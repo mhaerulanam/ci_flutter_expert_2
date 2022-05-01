@@ -89,8 +89,7 @@ class DetailTvSeriesModel extends Equatable {
         episodeRunTime: json["episode_run_time"] == null
             ? null
             : List<int>.from(json["episode_run_time"].map((x) => x)),
-        firstAirDate:
-            json["first_air_date"] == null ? null : json["first_air_date"],
+        firstAirDate: json["first_air_date"],
         genres: List<GenreModel>.from(
             json["genres"].map((x) => GenreModel.fromJson(x))),
         homepage: json["homepage"],
@@ -99,8 +98,7 @@ class DetailTvSeriesModel extends Equatable {
         languages: json["languages"] == null
             ? null
             : List<String>.from(json["languages"].map((x) => x)),
-        lastAirDate:
-            json["last_air_date"] == null ? null : json["last_air_date"],
+        lastAirDate: json["last_air_date"],
         lastEpisodeToAir: LastEpisodeToAir.fromMap(json["last_episode_to_air"]),
         name: json["name"],
         nextEpisodeToAir: json["next_episode_to_air"],
@@ -207,7 +205,7 @@ class DetailTvSeriesModel extends Equatable {
 }
 
 class LastEpisodeToAir extends Equatable {
-  LastEpisodeToAir({
+  const LastEpisodeToAir({
     this.airDate,
     this.episodeNumber,
     this.id,
@@ -262,7 +260,7 @@ class LastEpisodeToAir extends Equatable {
 }
 
 class Network extends Equatable {
-  Network({
+  const Network({
     this.name,
     this.id,
     this.logoPath,

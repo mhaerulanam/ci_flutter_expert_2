@@ -2,7 +2,7 @@ name: movie
 description: A new Flutter package project.
 version: 0.0.1
 homepage:
-
+publish_to: none
 environment:
   sdk: ">=2.16.2 <3.0.0"
   flutter: ">=1.17.0"
@@ -16,6 +16,15 @@ dependencies:
 
   tv_series:
     path: ../tv_series/
+
+  watchlist:
+    path: ../watchlist/
+
+  search:
+    path: ../search/
+
+  home:
+    path: ../home/
 
   cupertino_icons: ^1.0.4
   http: ^0.13.4
@@ -50,10 +59,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
+  uses-material-design: true
   # To add assets to your package, add an assets section, like this:
   assets:
-    - ../assets/
+    - assets/
     - ../certificates/
 
   #
